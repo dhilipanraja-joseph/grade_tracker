@@ -13,6 +13,25 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/totals', (req, res) => {
+  Grade.getAll()
+    .then(assignments => {
+      res.send(totals(assignments));
+    })
+    .catch(err => {
+      res.status(400).send(err);
+    });
+});
+
+function totals(assignments){
+  var ts,tp;
+  assignments.forEach(assignment=>{
+    ts =+ assignment.score;
+    tp =+ assignment.points;
+  });
+  return {"totalScore" : ts , "totalPoints" : tp };
+}
+
 router.get('/:id', (req, res) => {
   Grade.getOne(req.params.id)
     .then(grade => {
@@ -56,15 +75,6 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.get('/total', (req, res) => {
-  Grade.getAll()
-    .then(grades => {
-      res.send(grades);
-    })
-    .catch(err => {
-      res.status(400).send(err);
-    });
-});
 
 
 module.exports = router;

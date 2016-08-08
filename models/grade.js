@@ -32,27 +32,7 @@ exports.getAll = function() {
   });
 };
 
-function addGrades(assignments){
-  var graded = assignments.map(assignment=>{
-    var p = Math.floor(assignment.score/assignment.points*100),grade;
-    console.log(p);
-    if(p===50){
-      assignment.grade = 'E';return assignment.grade;
-    }else if(p>50 && p<60){
-      assignment.grade = 'D';return assignment.grade;
-    }else if(p>=60 && p<70){
-      assignment.grade = 'C';return assignment.grade;
-    }else if(p>=70 && p<80){
-      assignment.grade = 'B';return assignment.grade;
-    }else if(p>=80 && p<90){
-      assignment.grade = 'A';return assignment.grade;
-    }else if(p>=90){
-      assignment.grade = 'S';return assignment.grade;
-    }
-    // console.log(grade);
-  });
-  return graded;
-}
+
 
 exports.getOne = function(id) {
   return new Promise((resolve, reject) => {
@@ -132,20 +112,21 @@ exports.update = function(id, updateObj) {
 };
 
 
-// exports.totals = function() {
-//   return new Promise((resolve, reject) => {
-//
-//     let sql = squel.select().from('assignments').toString();
-//
-//     connection.query(sql, (err,assignments) => {
-//       if(err) {
-//         reject(err);
-//       } else {
-//         resolve(assignments);
-//       }
-//     });
-//   });
-// };
+exports.getTotal = function() {
+  return new Promise((resolve, reject) => {
+
+    let sql = squel.select().from('assignments').toString();
+
+    connection.query(sql, (err,assignments) => {
+      if(err) {
+        reject(err);
+      } else {
+        // addGrades(assignments);
+        resolve(assignments);
+      }
+    });
+  });
+};
 
 
 // function totals(assignments){
@@ -157,3 +138,24 @@ exports.update = function(id, updateObj) {
 //   });
 //   return total;
 // }
+function addGrades(assignments){
+  var graded = assignments.map(assignment=>{
+    var p = Math.floor(assignment.score/assignment.points*100),grade;
+    // console.log(p);
+    if(p===50){
+      assignment.grade = 'E';return assignment.grade;
+    }else if(p>50 && p<60){
+      assignment.grade = 'D';return assignment.grade;
+    }else if(p>=60 && p<70){
+      assignment.grade = 'C';return assignment.grade;
+    }else if(p>=70 && p<80){
+      assignment.grade = 'B';return assignment.grade;
+    }else if(p>=80 && p<90){
+      assignment.grade = 'A';return assignment.grade;
+    }else if(p>=90){
+      assignment.grade = 'S';return assignment.grade;
+    }
+    // console.log(grade);
+  });
+  return graded;
+}
