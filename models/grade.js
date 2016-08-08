@@ -25,11 +25,34 @@ exports.getAll = function() {
       if(err) {
         reject(err);
       } else {
+        addGrades(assignments);
         resolve(assignments);
       }
     });
   });
 };
+
+function addGrades(assignments){
+  var graded = assignments.map(assignment=>{
+    var p = Math.floor(assignment.score/assignment.points*100),grade;
+    console.log(p);
+    if(p===50){
+      assignment.grade = 'E';return assignment.grade;
+    }else if(p>50 && p<60){
+      assignment.grade = 'D';return assignment.grade;
+    }else if(p>=60 && p<70){
+      assignment.grade = 'C';return assignment.grade;
+    }else if(p>=70 && p<80){
+      assignment.grade = 'B';return assignment.grade;
+    }else if(p>=80 && p<90){
+      assignment.grade = 'A';return assignment.grade;
+    }else if(p>=90){
+      assignment.grade = 'S';return assignment.grade;
+    }
+    // console.log(grade);
+  });
+  return graded;
+}
 
 exports.getOne = function(id) {
   return new Promise((resolve, reject) => {
@@ -44,11 +67,13 @@ exports.getOne = function(id) {
       if(err) {
         reject(err);
       } else {
+        addGrades([assignment]);
         resolve(assignment);
       }
     });
   });
 };
+
 
 exports.create = function(newAssignment) {
   return new Promise((resolve, reject) => {
@@ -76,7 +101,7 @@ exports.delete = function(id) {
                    .where('id = ?', id)
                    .toString();
 
-    connection.query(sql, (err, result) => {
+    connection.query(sql, err => {
       if(err) {
         reject(err);
       } else {
@@ -96,7 +121,7 @@ exports.update = function(id, updateObj) {
                    .where('id = ?', id)
                    .toString();
 
-    connection.query(sql, (err, okObject) => {
+    connection.query(sql, err => {
       if(err) {
         reject(err);
       } else {
@@ -107,21 +132,28 @@ exports.update = function(id, updateObj) {
 };
 
 
-// exports.totals = function(id, updateObj) {
+// exports.totals = function() {
 //   return new Promise((resolve, reject) => {
 //
-//     let sql = squel.update()
-//                    .table('assignments')
-//                    .setFields(updateObj)
-//                    .where('id = ?', id)
-//                    .toString();
+//     let sql = squel.select().from('assignments').toString();
 //
-//     connection.query(sql, (err, okObject) => {
+//     connection.query(sql, (err,assignments) => {
 //       if(err) {
 //         reject(err);
 //       } else {
-//         resolve();
+//         resolve(assignments);
 //       }
 //     });
 //   });
 // };
+
+
+// function totals(assignments){
+//   console.log(assignments);
+//   var totalPoints,totalScore;
+//   var total = assignments.reduce(assignment => {
+//     totalScore += assignment.score;
+//     totalPoints += assignment.points;
+//   });
+//   return total;
+// }

@@ -16,6 +16,10 @@ app.use(bodyParser.json());
 
 app.use('/grades', require('./routes/grades'));
 
+// app.get('/total',(req,res)=>{
+//
+//
+// });
 
 app.listen(PORT, err => {
   console.log(err || `Server listening on port ${PORT}`);

@@ -56,18 +56,15 @@ router.put('/:id', (req, res) => {
     });
 });
 
-// router.put('/total', (req, res) => {
-//   Grade.total(req.params.id, req.body)
-//     .then(() => {
-//       return Grade.getAll(req.params.id);
-//     })
-//     .then(grade => {
-//       res.send(grade);
-//     })
-//     .catch(err => {
-//       res.status(400).send(err);
-//     });
-// });
+router.get('/total', (req, res) => {
+  Grade.getAll()
+    .then(grades => {
+      res.send(grades);
+    })
+    .catch(err => {
+      res.status(400).send(err);
+    });
+});
 
 
 module.exports = router;
